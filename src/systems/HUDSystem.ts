@@ -1,8 +1,9 @@
 import { Container, Text, Graphics } from "pixi.js";
-import { WAVES_TOTAL, PLAYER_HEALTH_BAR_WIDTH, PLAYER_HEALTH_BAR_HEIGHT } from "./params";
-import type { GameState } from "./state";
+import { PLAYER_HEALTH_BAR_WIDTH, PLAYER_HEALTH_BAR_HEIGHT } from "../params";
+import { C, type StatsComponent } from "../ecs/Components";
+import type { World, System } from "../ecs/World";
 
-export class HUD {
+export class HUDSystem implements System {
   container = new Container();
   private waveText: Text;
   private timerText: Text;
@@ -44,22 +45,23 @@ export class HUD {
     parent.addChild(this.container);
   }
 
-  update(state: GameState, waveTimer: number): void {
-    this.waveText.text = `Wave ${state.wave} / ${WAVES_TOTAL}`;
-    this.timerText.text = `${Math.max(0, Math.ceil(waveTimer))}s`;
-    this.matText.text = `Mats: ${state.materials}`;
-    const names = state.equippedWeapons.filter(Boolean).map(w => w!.name).join(", ");
-    this.weaponText.text = names || "No weapon";
+  update(world: World, _dt: number): void {
+    // HUD reads from ECS state via the player's StatsComponent
+    const players = world.query(C.Player, C.Stats);
+    if (players.length === 0) return;
+    const s = world.get<StatsComponent>(players[0], C.Stats);
 
-    const pct = Math.max(0, state.playerStats.currentHp / state.playerStats.maxHp);
+    // We need wave, materials from external tracking — passed via fields
+    this.hpText.text = `HP: ${Math.ceil(s.currentHp)} / ${s.maxHp}`;
+    const pct = Math.max(0, s.currentHp / s.maxHp);
     this.hpBarFill
       .clear()
       .rect(0, 0, PLAYER_HEALTH_BAR_WIDTH * pct, PLAYER_HEALTH_BAR_HEIGHT)
       .fill({ color: pct > 0.5 ? 0x00ff44 : pct > 0.25 ? 0xffaa00 : 0xff3333 });
-    this.hpText.text = `HP: ${Math.ceil(state.playerStats.currentHp)} / ${state.playerStats.maxHp}`;
   }
 
-  destroy(): void {
-    this.container.destroy({ children: true });
-  }
+  setWaveText(v: string): void { this.waveText.text = v; }
+  setTimerText(v: string): void { this.timerText.text = v; }
+  setMatText(v: string): void { this.matText.text = v; }
+  setWeaponText(v: string): void { this.weaponText.text = v; }
 }

@@ -1,6 +1,7 @@
-import { WAVES_TOTAL } from "./params";
+import { WAVES_TOTAL } from "../params";
+import type { World, System } from "../ecs/World";
 
-export class WaveManager {
+export class WaveSystem implements System {
   wave = 0;
   timer = 0;
   active = false;
@@ -11,7 +12,7 @@ export class WaveManager {
     this.active = true;
   }
 
-  update(dt: number): void {
+  update(_world: World, dt: number): void {
     if (!this.active) return;
     this.timer -= dt;
     if (this.timer <= 0) {
@@ -26,10 +27,6 @@ export class WaveManager {
 
   get isLastWave(): boolean {
     return this.wave >= WAVES_TOTAL;
-  }
-
-  get duration(): number {
-    return this.getDuration(this.wave);
   }
 
   private getDuration(wave: number): number {

@@ -25,10 +25,8 @@ export interface GameState {
   xp: number;
   level: number;
   playerStats: PlayerStats;
-  baseStats: PlayerStats;
   equippedWeapons: (WeaponDef | null)[];
   dangerLevel: number;
-  invFramesTimer: number;
   elapsed: number;
   levelUpsPending: number;
   shopSlots: (WeaponDef | null)[];
@@ -63,10 +61,8 @@ export function createInitialState(): GameState {
     xp: 0,
     level: 1,
     playerStats: { ...base, currentHp: base.maxHp },
-    baseStats: base,
     equippedWeapons: new Array(6).fill(null),
     dangerLevel: 0,
-    invFramesTimer: 0,
     elapsed: 0,
     levelUpsPending: 0,
     shopSlots: Array(4).fill(null),
