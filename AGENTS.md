@@ -59,16 +59,18 @@ Each Level-up gives a choice of upgrading 4 random stats. Diminishing returns / 
 ### Rules
 - Up to 6 weapon slots.
 - Merge: two identical same-tier weapons → produce Tier+1 weapon (Tier 1–4).
+- Buying with all 6 slots full: only allowed if purchased weapon matches an existing one (same id + tier) → auto-merges into tier+1 upgrade.
 - Class Synergies: equipping multiple weapons of same class triggers passive stacking stat bonuses.
 - Starting selection: pick 1 of 5 random Tier-1 weapons before first wave.
 
 ## Shop (Post-Wave Phase)
 
 - 4 weapon slots showing random weapons (tier-gated by Danger level and wave progression).
-- Reroll button (cost scales with wave). Lock slot button (prevents that slot from rerolling).
-- No starting gold — spend materials earned during combat.
-- Prices scale with each subsequent wave (inflation).
-- Slots fill from left — clicking a weapon buys and equips into first empty slot (or swaps).
+- Buying a weapon leaves that slot empty ("SOLD"). Reroll refreshes all unlocked slots.
+- Lock slot button (prevents that slot from rerolling, persists across waves).
+- Reroll button (cost scales with wave). Cost drops to 0 when all slots are empty.
+- No starting gold — spend materials earned during combat. Prices scale with wave.
+- Slots fill from left — clicking a weapon buys and equips into first empty slot (or auto-merges if full).
 
 ## Enemies
 
@@ -94,9 +96,10 @@ Each Level-up gives a choice of upgrading 4 random stats. Diminishing returns / 
 
 ## Materials
 
-- Drop on enemy death as small orbs on the ground.
+- Drop on enemy death as small orbs on the ground (1 orb per material unit).
+- Orbs burst outward from death position with decaying velocity (bounce off arena edges).
 - Player must walk over them to collect (risk/reward).
-- Orbs are auto-attracted to player within Collect radius.
+- Orbs are auto-attracted to player within Collect radius (attract speed always > player speed).
 - At wave end, Harvest % of remaining ground materials is auto-collected.
 - Serve dual purpose: gold (shop) + XP (level-ups).
 
@@ -107,5 +110,3 @@ Each Level-up gives a choice of upgrading 4 random stats. Diminishing returns / 
 - Wave timer (countdown seconds)
 - Materials counter
 - Weapons bar (6 slots showing equipped weapons)
-
-Tasks and progress are tracked in todo.md
